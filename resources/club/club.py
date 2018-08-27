@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask import request
+from flask.json import JSONDecoder
 from mock_data import CLUBS, CollectionWrapper
 
 class ClubResource(Resource):
@@ -16,23 +17,16 @@ class ClubResource(Resource):
         return None, 500
 
     def post(self):
+        club = request.get_json()
+
         clubsWrapper = CollectionWrapper(CLUBS)
-        parser = reqparse.RequestParser()
-        parser.add_argument('name')
-        parser.add_argument('description')
-        args = parser.parse_args()
 
         # TODO: validate if the request body contains
         # the required data
 
         largestId = clubsWrapper.max(lambda i: i['id'])
 
-        club = {
-            'id': largestId,
-            'name': args['name'],
-            'description': args['description']
-        }
-
+        club['id'] = largestId
         CLUBS.append(club)
 
         return 'Created club with name ' + club['name'], 201
