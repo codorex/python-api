@@ -1,9 +1,15 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource 
 from flask import request
 from flask.json import JSONDecoder
 from mock_data import CLUBS, CollectionWrapper
+from resources.routeMixin import RouteMixin
 
-class ClubResource(Resource):
+class ClubResource(Resource, RouteMixin):
+    routes = [
+        '/clubs',
+        '/clubs/<int:id>'
+    ]
+
     def get(self, id):
         if id is None:
             return None
@@ -17,8 +23,8 @@ class ClubResource(Resource):
         return None, 500
 
     def post(self):
+        return request.headers.__str__()
         club = request.get_json()
-
         clubsWrapper = CollectionWrapper(CLUBS)
 
         # TODO: validate if the request body contains

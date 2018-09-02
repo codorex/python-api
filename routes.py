@@ -3,19 +3,13 @@ from resources.club.club import ClubResource
 from flask_restful import Api
 from flask import Flask
 
-route_config = [
-    {
-        'resource': ClubListResource, 
-        'routes': ["/clubs"]
-    },
-    {
-        'resource': ClubResource,
-        'routes': ["/club", "/club/<int:id>"]
-    }
+resource_config = [
+    ClubListResource,
+    ClubResource
 ]
 
-def register_routes(api):
-    for route in route_config:
-        args = (route['routes'])
+def register_resources(api):
+    for res in resource_config:
+        args = (res.routes)
         
-        api.add_resource(route['resource'], *args)
+        api.add_resource(res, *args)
